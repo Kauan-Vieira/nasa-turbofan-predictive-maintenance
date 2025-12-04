@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # Serviço 1: Nossa API (Backend)
+  api:
+    build: .
+    container_name: nasa_api
+    command: uvicorn api:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app  # Hot-reload: se mudar o código no Windows, muda no Docker
+
+  # Serviço 2: Nosso Dashboard (Frontend)
+  dashboard:
+    build: .
+    container_name: nasa_dashboard
+    command: streamlit run dashboard.py
+    ports:
+      - "8501:8501"
+    environment:
+      # AQUI ESTÁ O SEGREDO: O dashboard chama o serviço "api", não "localhost"
+      - API_URL=http://api:8000/predict
+    depends_on:
+      - api
+    volumes:
+      - .:/app

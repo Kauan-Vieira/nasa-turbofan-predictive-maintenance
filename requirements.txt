@@ -1,0 +1,9 @@
+polars
+xgboost
+scikit-learn
+fastapi
+uvicorn
+streamlit
+requests
+plotly
+pandas
